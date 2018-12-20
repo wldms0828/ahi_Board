@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- application에 대한 설정 (Service나 dao) -->
+	<context:component-scan base-package="com.bit.**.service"></context:component-scan>
+	
+	<bean id="ds" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="driverClass" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@192.168.0.80:1521:xe"/>
+		<property name="username" value="bitboard"/>
+		<property name="password" value="bitboard"/>
+	</bean>
+	
+	<bean id="ssfb" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="ds"/>
+		<property name="configLocation" value="classpath:com/bit/config/mybatis/Configuration.xml"/><!-- 설정 -->
+		<property name="mapperLocations"><!-- 쿼리 -->
+			<list>
+				<value>classpath:com/bit/config/mybatis/board_admin.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="ss" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="ssfb"/> <!-- 생성자를 자동으로 가지고 있는것이 없으므로 만들어준다 -->
+	</bean>
+	
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="ds"/>
+		<!-- 이렇게만 해두면 개발자가 직접 다 관리 해야한다. 그래서  아래처럼 tx:annotation-driven 걸어줘야 한다. 그래야 자동으로 트랜잭션 처리를 해준다. -->
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="txManager"/>
+</beans>
