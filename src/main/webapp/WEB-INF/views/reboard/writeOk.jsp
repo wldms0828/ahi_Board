@@ -1,22 +1,39 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
     <%@include file="/WEB-INF/views/common/public.jsp" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="ko">
-<head>
-<title>글입력 성공</title>
 
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="${root}/css/skin_purple.css" type="text/css">
-</head>
 
-<body>
+<c:choose>
+	<c:when test="${errorMsg != null }">
+		<font color="red" size="15"> ${errorMsg}</font>
+	</c:when>
+	<c:otherwise>
+	>>>>>>${wseq}
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	control = "${root}/reboard/";
+	
+	initVars();
+	
+	$('#viewBtn').click(function() {
+		$("#seq").val("${wseq}");
+		alert($("#seq").val());
+		$("#commonForm").attr("method","get").attr("action",viewpath).submit();
+	});
+	$('#listBtn').click(function() {
+		
+	});
+});
+
+</script>
+	
 
 <table width="100%" cellpadding="6" cellspacing="2" border="0"
 	bgcolor="#ffffff" style="border: #e1e1e1 solid 1px">
 	<tr>
-		<td class="bg_board_title" width="100%"><img
-			src="${root}/img/board/icon_arrow_08.gif" width="3" height="11"
+		<td class="bg_board_title" width="100%">
+		<img src="${root}/img/board/icon_arrow_08.gif" width="3" height="11"
 			border="0" align="absmiddle" hspace="6" vspace="6"> <b>게시판</b>
 		</td>
 	</tr>
@@ -29,15 +46,17 @@
 			align="center"><b>게시물이 등록되었습니다.</b><br>
 		<br>
 
-		<div align="center"><a href=""><img
-			src="${root}/img/board/b_wirtecf.gif" width="91" height="21"
-			border="0" align="absmiddle" alt="작성한 글 확인" hspace="10"></a><a
-			href=""><img src="${root}/img/board/poll_listbu1.gif"
-			width="62" height="21" border="0" align="absmiddle" alt="목록보기"
-			hspace="10"></a>
+		<div align="center">
+			<img src="${root}/img/board/b_wirtecf.gif" id="viewBtn" width="91" height="21"
+			border="0" align="absmiddle" alt="작성한 글 확인" hspace="10">
+			<img src="${root}/img/board/poll_listbu1.gif" id="listBtn" width="62" height="21" border="0" 
+			align="absmiddle" alt="목록보기"
+			hspace="10">
 		</td>
 	</tr>
 </table>
 <br>
+</c:otherwise>
+</c:choose>
 </body>
 </html>

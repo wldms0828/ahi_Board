@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
     <%@include file="/WEB-INF/views/common/public.jsp" %>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="ko">
-<head>
-<title>글보기</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="${root}/css/skin_purple.css" type="text/css">
-</head>
 
-<body>
+<c:if test="${article == null}">
+<script>
+	alert("해당글이 삭제되었거나 잘못된 URL 접근입니다.");
+	document.location.href = "${root}/index.jsp";
+</script>
+</c:if>
+<c:if test="${article != null}">
+
 <!-- title -->
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 	<tr>
@@ -59,7 +59,7 @@
 	</tr>
 	<tr height="28">
 		<td class="bg_board_title" colspan="2" style="padding-left: 14px">
-		<b><font class="text"> 제목을 출력 부분 </font></b></td>
+		<b><font class="text"> ${article.subject} </font></b></td>
 	</tr>
 	<tr>
 		<td class="bg_board_title_02" colspan="2" height="1"
@@ -67,14 +67,14 @@
 	</tr>
 	<tr height="26">
 		<td width="100%" style="padding-left: 14px"><font class="stext">번호
-		:</font> <font class="text_commentnum">글 번호를 출력 하는 부분</font> &nbsp; <font
+		:</font> <font class="text_commentnum">${article.seq}</font> &nbsp; <font
 			class="stext">글쓴이 :</font> <a href="javascript:;"
-			onClick="showSideView();" class="link_board_02">글쓴이를 출력 하는 부분</a><br>
+			onClick="showSideView();" class="link_board_02">${article.name}</a><br>
 		</td>
 		<td style="padding-right: 14px" nowrap class="stext">조회 : <font
-			class="text_commentnum">조회수를 출력 하는 부분</font> &nbsp; 스크랩 : <font
+			class="text_commentnum">${article.hit}</font> &nbsp; 스크랩 : <font
 			class="text_commentnum">0</font> &nbsp; 날짜 : <font
-			class="text_commentnum">날짜 출력하는 부분</font></td>
+			class="text_commentnum">${article.logtime}</font></td>
 	</tr>
 	<tr>
 		<td class="bg_board_title_02" colspan="2" height="1"
@@ -89,7 +89,7 @@
 
 
 
-		<P>글 내용이 들어 오는 부분</P>
+		<P>${article.content }</P>
 
 
 
@@ -134,5 +134,6 @@
 	</tr>
 </table>
 <br>
+</c:if>
 </body>
 </html>
