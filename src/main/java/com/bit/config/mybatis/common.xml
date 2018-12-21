@@ -7,4 +7,9 @@
 		select board_seq.nextval
 		from dual
   	</select>
+  	<update id="updateHit" parameterType="int">
+  		update board
+  		set hit = hit +1
+  		where seq = #{seq}	
+  	</update>
   </mapper>

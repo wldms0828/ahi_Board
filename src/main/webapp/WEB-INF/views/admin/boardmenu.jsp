@@ -50,7 +50,7 @@
 	<c:set var="idx" value="${board.ccode}"/>
 	<div class="menu_body">
 		</c:if>
-	<a href="${root}/${board.control}/write.bit?bcode=${board.bcode}&pg=1&key=&word=">${board.bname}</a>
+	<a href="${root}/${board.control}/list.bit?bcode=${board.bcode}&pg=1&key=&word=">${board.bname}</a>
 	<!-- 어떤 페이지에서 넘어왔는지는 항상 기억하고 있어야 한다. -->
 	<c:if test="${i.index < menu.size()-1 }">
 		<c:if test="${idx != menu.get(i.index+1).ccode}">

@@ -13,9 +13,28 @@
 <!-- 		select 문은 구색을 맞추기 위해 넣어준 것이라고 생각하면 됌 -->
   	</insert>
   	<select id="viewArticle" parameterType="int" resultType="reboardDto">
-  	select b.seq, b.name, b.id, b.email, b.subject, b.content, b.hit, b.bcode, b.logtime,
-  		   r.rseq, r.ref, r.lev, r.step, r.pseq, r.reply
-	from board b, reboard r
-	where b.seq=r.seq and b.seq=#{seq}
+	  	select b.seq, b.name, b.id, b.email, b.subject, b.content, b.hit, b.bcode, b.logtime,
+	  		   r.rseq, r.ref, r.lev, r.step, r.pseq, r.reply
+		from board b, reboard r
+		where b.seq=r.seq and b.seq=#{seq}
+  	</select>
+  	<select id="listArticle" parameterType="Map" resultType="reboardDto">
+		select b.*
+		from(
+			select rownum rn, a.*
+			from(
+				select b.seq, b.name, b.id, b.email, b.subject, b.content, b.hit, b.bcode, 
+					   decode(to_char(b.logtime,'yymmdd'),
+							  to_char(sysdate,'yymmdd'), to_char(b.logtime,'hh24:mi:ss'),
+							  to_char(b.logtime,'yy.mm.dd')) logtime,
+					   r.rseq, r.ref, r.lev, r.step, r.pseq, r.reply
+				from board b, reboard r
+				where b.seq=r.seq 
+				and b.bcode=#{bcode}
+				order by seq desc
+				)a
+			where rownum &lt;= #{end}
+			)b
+		where b.rn > #{start}
   	</select>
   </mapper>
