@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.bit.board.common.service.CommonService;
 import com.bit.board.model.AlbumDto;
+import com.bit.board.model.ReboardDto;
 import com.bit.board.service.AlbumService;
 import com.bit.member.model.MemberDto;
 import com.bit.util.PagiNavigation;
@@ -106,6 +107,13 @@ public class AlbumController {
 		}
 		return "album/writeOk";
 	}
-	
-	
+	@RequestMapping("view.bit")
+	 public String view(@RequestParam int seq,HttpSession session, Model model) {
+		 MemberDto memberDto = (MemberDto) session.getAttribute("userInfo");
+		 if(memberDto != null) {
+			 AlbumDto albumDto = albumService.viewArticle(seq);
+			 model.addAttribute("article",albumDto);
+		 }
+		 return "album/view";
+	 }
 }
