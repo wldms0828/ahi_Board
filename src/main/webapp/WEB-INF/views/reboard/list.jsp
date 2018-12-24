@@ -12,8 +12,8 @@ $(document).ready(function() {
 		
 		$('.posting').click(function() {
 			/* alert($(this).children().first().text());
-			alert($(this).attr("article-no"+"<<<<")); */
-			alert("<<"+$(this).attr("article-no"));
+			alert($(this).attr("article-no"+"<<<<")); 
+			alert("<<"+$(this).attr("article-no"));*/
 			$('#seq').val($(this).attr("article-no"));
 			$("#commonForm").attr("method","get").attr("action",viewpath).submit();
 		});
@@ -116,7 +116,9 @@ $(document).ready(function() {
 		<!--td>
      
      </td-->
-		<td style="word-break: break-all;">${article.subject.replace("<","&lt;")}&nbsp;&nbsp;&nbsp;</td>
+		<td style="word-break: break-all;">
+		<img src="${root}/img/board/blank.gif" height="1" width="${article.lev *10}">
+		<span> ${article.subject.replace("<","&lt;")}&nbsp;&nbsp;&nbsp;</span></td>
 		<td></td>
 		<td style="word-break: break-all;">${article.name}</td>
 		<td></td>
@@ -133,7 +135,7 @@ $(document).ready(function() {
 </c:if>
 <c:if test="${articlelist.size() == 0}">
 	<tr>
-		<td align="center" colspan="1">검색 결과가 없습니다.</td>
+		<td align="center" colspan="11">검색 결과가 없습니다.</td>
 	</tr>
 </c:if>
 	<tr>

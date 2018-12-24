@@ -11,7 +11,10 @@ public interface ReboardDao {
 	//실패 0 성공 1 -> 글 번호
 	List<ReboardDto> listArticle(Map<String, String> param);
 	ReboardDto viewArticle(int seq);
+	// 아래 세가지가 다 일어나야 답글기능이 다 가능하다.
 	int replyArticle(ReboardDto reboardDto);
+	void updateStep(ReboardDto reboardDto);
+	void updateReply(int pseq);
 	
 	void modifyArticle(ReboardDto reboardDto);
 	void deleteArticle(int seq);

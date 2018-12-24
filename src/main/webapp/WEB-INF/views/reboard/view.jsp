@@ -17,6 +17,10 @@ $(document).ready(function() {
 		$('.writeBtn').click(function() {
 			$("#commonForm").attr("method","get").attr("action",writepath).submit();
 		});
+		$('.replyBtn').click(function() {
+			$("#seq").val("${article.seq}");
+			$("#commonForm").attr("method","get").attr("action",replypath).submit();
+		});
 		$('.newpage').click(function() {
 			$("#pg").val(1);
 			$("#key").val("");
@@ -51,9 +55,9 @@ $(document).ready(function() {
 	<tr>
 		<td valign="bottom" nowrap>
 		
-		<img src="${root}/img/board/btn_write_01.gif" cl width="64" height="22"
+		<img src="${root}/img/board/btn_write_01.gif" class="writeBtn" width="64" height="22"
 			border="0" align="absmiddle" alt="글쓰기">
-			 <img src="${root}/img/board/btn_reply.gif" width="40" height="22"
+			 <img src="${root}/img/board/btn_reply.gif" class="replyBtn" width="40" height="22"
 			border="0" align="absmiddle" alt="답글">
 		</td>
 		
@@ -111,7 +115,7 @@ $(document).ready(function() {
 
 
 
-		<P>${article.content }</P>
+		<P>${article.content}</P>
 
 
 
@@ -135,9 +139,9 @@ $(document).ready(function() {
 		<td colspan="3" height="5" style="padding: 0px"></td>
 	</tr>
 	<tr valign="top">
-		<td nowrap><img src="${root}/img/board/btn_write_01.gif" cl width="64" height="22"
+		<td nowrap><img src="${root}/img/board/btn_write_01.gif" class="writeBtn" width="64" height="22"
 			border="0" align="absmiddle" alt="글쓰기">
-			 <img src="${root}/img/board/btn_reply.gif" width="40" height="22"
+			 <img src="${root}/img/board/btn_reply.gif" class="replyBtn" width="40" height="22"
 			border="0" align="absmiddle" alt="답글"></td>
 		<td style="padding-left: 4px" width="100%"><a href=""
 			target="new"><img src="${root}/img/board/btn_print.gif"

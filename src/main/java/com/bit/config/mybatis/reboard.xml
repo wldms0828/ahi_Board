@@ -43,11 +43,34 @@
 					</choose>
 				</if>
 				
-				order by seq desc
+				order by ref desc, step
 				)a
 			where rownum &lt;= #{end}
 			)b
 		where b.rn > #{start}
   	</select>
-  	<!-- statement $ , prepared # -->
+  	<!-- statement $ , prepared #
+  		답글은 늦게 단 게시물이 원 게시물 아래에 달려야 하기 때문에 order by ref desc, step 그룹번호순으로 정리해 준다.
+  	 -->
+  	
+  	<update id="updateStep" parameterType="reboardDto">
+  		update reboard 
+  		set step = step + 1
+  		where ref = #{ref}
+  		and step > #{step}
+  		
+  	</update>
+  	<insert id="replyArticle" parameterType="reboardDto">
+		insert all
+			into board (seq, name, id, email, subject, content, hit, logtime, bcode)
+			values (#{seq},#{name},#{id},#{email},#{subject},#{content},0, sysdate, #{bcode})
+			into reboard (rseq, seq, ref, lev, step, pseq, reply)
+		values (reboard_rseq.nextval, #{seq}, #{ref}, #{lev}+1, #{step}+1, #{pseq}, 0)
+		select * from dual
+  	</insert>
+  	<update id="updateReply" parameterType="int">
+  		update reboard 
+  		set reply = reply + 1
+  		where seq = #{pseq}
+  	</update>
   </mapper>

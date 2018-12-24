@@ -5,7 +5,8 @@
 MemberDto memberDto = new MemberDto();
 memberDto.setId("jieun");
 memberDto.setName("김지은");
-memberDto.setEmail("wldmsl0828@naver.com");
+
+memberDto.setEmail("wldms0828@naver.com");
 
 session.setAttribute("userInfo", memberDto);
 

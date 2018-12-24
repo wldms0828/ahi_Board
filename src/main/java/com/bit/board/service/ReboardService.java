@@ -11,6 +11,7 @@ public interface ReboardService {
 	//실패 0 성공 1 -> 글 번호
 	List<ReboardDto> listArticle(Map<String, String> param);
 	ReboardDto viewArticle(int seq);
+	ReboardDto getArticle(int seq);
 	int replyArticle(ReboardDto reboardDto);
 	
 	void modifyArticle(ReboardDto reboardDto);
