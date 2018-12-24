@@ -13,21 +13,30 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bit.board.common.service.CommonService;
 import com.bit.board.model.ReboardDto;
 import com.bit.board.service.ReboardService;
 import com.bit.member.model.MemberDto;
+import com.bit.util.PagiNavigation;
 
 @Controller
 @RequestMapping("/reboard")
 public class ReboardController {
 	@Autowired
 	private ReboardService reboardService;
+	@Autowired
+	private CommonService commonService;
 	
 	@RequestMapping("list.bit")
 	public ModelAndView list(@RequestParam Map<String, String> param) {
 		ModelAndView mav = new ModelAndView();
 		List<ReboardDto> list = reboardService.listArticle(param);
+		PagiNavigation navigation = commonService.makePageNavigation(param);
+		navigation.setRoot("/board");
+		navigation.makeNavigator();
+		
 		mav.addObject("articlelist",list);
+		mav.addObject("navigator",navigation);
 		mav.setViewName("reboard/list");
 		
 		return mav;

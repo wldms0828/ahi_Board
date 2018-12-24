@@ -17,6 +17,32 @@ $(document).ready(function() {
 			$('#seq').val($(this).attr("article-no"));
 			$("#commonForm").attr("method","get").attr("action",viewpath).submit();
 		});
+		$('#firstpage').click(function() {
+			$('#pg').val("1");
+			$('#key').val("");
+			$('#word').val("");
+			$("#commonForm").attr("method","get").attr("action",listpath).submit();
+		});
+		$('.mvpage').click(function() {
+			$('#pg').val($(this).attr("move-page-no"));
+			$('#key').val("");
+			$('#word').val("");
+			$("#commonForm").attr("method","get").attr("action",listpath).submit();
+		});
+		$('#searchBtn').click(function() {
+			$('#pg').val("1");
+			$('#key').val($('#skey').val());
+			$('#word').val($('#sword').val());
+			$("#commonForm").attr("method","get").attr("action",listpath).submit();
+		});
+		
+		$('#myBtn').click(function() {
+			$('#pg').val("1");
+			$('#key').val("id");
+			$('#word').val("${userInfo.id}");
+			$("#commonForm").attr("method","get").attr("action",listpath).submit();
+		});
+		
 });
 </script>
 <!-- title start -->
@@ -43,8 +69,8 @@ $(document).ready(function() {
 			 border="0" align="absmiddle" alt="글쓰기"></td>
 
 		<td width="100%" style="padding-left: 6px" valign="bottom">새글 <b><font
-			class="text_acc_02">새글 수를 출력 하는 부분</font></b> / 전체 <font
-			class="text_acc_02">전체 글수를 출력 하는 부분</font></td>
+			class="text_acc_02">${navigator.newArticleCount}</font></b> / 전체 <font
+			class="text_acc_02">${navigator.totalArticleCount}</font></td>
 		<td width="300" nowrap>
 		<div align="right"></div>
 		</td>
@@ -81,6 +107,7 @@ $(document).ready(function() {
 
 
 	<!-- 공지기능 적용끝  -->
+	<c:if test="${articlelist.size() != 0}">
 	<c:forEach var="article" items="${articlelist}">
 	<tr class="posting" article-no="${article.seq}">
 		<td align="center" class="text_gray">${article.seq}</td>
@@ -102,8 +129,13 @@ $(document).ready(function() {
 		<td bgcolor="#ededed" height="1" colspan="11"
 			style="overflow: hidden; padding: 0px"></td>
 	</tr>
-</c:forEach>
-
+</c:forEach>  
+</c:if>
+<c:if test="${articlelist.size() == 0}">
+	<tr>
+		<td align="center" colspan="1">검색 결과가 없습니다.</td>
+	</tr>
+</c:if>
 	<tr>
 		<td class="bg_board_title_02" height="1" colspan="11"
 			style="overflow: hidden; padding: 0px"></td>
@@ -121,8 +153,8 @@ $(document).ready(function() {
 	<td nowrap>
 		<img src="${root}/img/board/btn_write_01.gif" class="writeBtn" width="64" height="22"
 			 border="0" align="absmiddle" alt="글쓰기"></td>
-		<td width="100%" align="center"><!--PAGE--> 페이지 분류를 하는 부분</td>
-		<td nowrap class="stext"><b>현재 페이지 출력 부분</b> / 총 페이지수를 출력 하는 부분
+		<td width="100%" align="center"><!--PAGE--> ${navigator.navigator}</td>
+		<td nowrap class="stext"><b>${navigator.pageNo}</b> / ${navigator.totalPageCount}
 		pages</td>
 	</tr>
 </table>
@@ -130,29 +162,27 @@ $(document).ready(function() {
 <!-- 하단 페이징 -->
 
 <!-- 검색 영역-->
-<form name="searchForm" method="post" action="javascript:goBbsSearch();"
-	style="margin: 0px"><input type="hidden" name="" value="">
+
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 	<tr>
 		<td colspan="3" height="10"></td>
 	</tr>
 	<tr>
 		<td width="50%"></td>
-		<td nowrap><select name="item" onchange="javascript:ch()"
+		<td nowrap><select name="key" id="skey" onchange="javascript:ch()"
 			class="inp">
 			<option value="subject">글제목
-			<option value="writer">글쓴이
-			<option value="no">글번호
-		</select> <span id="sear1"> <input type="text" name="query" size="22"
-			class="inp" style="margin-top: -19px;"> </span> <span id="sear2"
-			style="display: none;"> <select name="head" class="inp">
-			<option value="말머리선택">말머리선택
-		</select> </span> <a href="javascript:goBbsSearch();"><img
-			src="${root}/img/board/sbtn_s.gif" width="32" height="18"
-			border="0" align="absmiddle" alt="검색"></a> <a
-			href="javascript:goMyList('안효인')"><img
-			src="${root}/img/board/sbtn_mytext.gif" width="82" height="20"
-			align="absmiddle" alt="내가 쓴 글 보기"></a><br>
+			<option value="name">글쓴이
+			<option value="seq">글번호
+		</select> <span id="sear1"> <input type="text" name="word" id="sword" size="22"
+			class="inp" style="margin-top: -19px;"> </span> 
+			<img src="${root}/img/board/sbtn_s.gif" width="32" height="18"
+			border="0" align="absmiddle" alt="검색" id="searchBtn">
+			<c:if test="${userInfo != null}">
+			<img src="${root}/img/board/sbtn_mytext.gif" width="82" height="20"
+			align="absmiddle" alt="내가 쓴 글 보기" id="myBtn">
+			</c:if>
+			<br>
 		</td>
 		<td width="50%" align="right"><a href="#"><img
 			src="${root}/img/board/sbtn_top.gif" width="24" height="11"
@@ -160,7 +190,6 @@ $(document).ready(function() {
 		</td>
 	</tr>
 </table>
-</form>
 </body>
 </html>
 

@@ -30,7 +30,7 @@ public class ReboardServiceImpl implements ReboardService {
 	public List<ReboardDto> listArticle(Map<String, String> param) {
 		int pg = Integer.parseInt(param.get("pg"));
 		int end = pg * BoardConstance.LIST_COUNT;
-		int start = end -  BoardConstance.LIST_COUNT;
+		int start = end - BoardConstance.LIST_COUNT;
 		param.put("start", start+"");
 		param.put("end", end+"");
 		return sqlsession.getMapper(ReboardDao.class).listArticle(param);
