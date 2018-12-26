@@ -16,19 +16,24 @@ $(document).ready(function() {
 			alert("<<"+$(this).attr("article-no"));*/
 			$('#seq').val($(this).attr("article-no"));
 			$("#commonForm").attr("method","get").attr("action",viewpath).submit();
+			$('#back_c').val($(this).css("background","coral"));
 		});
+
+		
 		$('#firstpage').click(function() {
 			$('#pg').val("1");
 			$('#key').val("");
 			$('#word').val("");
 			$("#commonForm").attr("method","get").attr("action",listpath).submit();
 		});
+		
 		$('.mvpage').click(function() {
 			$('#pg').val($(this).attr("move-page-no"));
 			$('#key').val("");
 			$('#word').val("");
 			$("#commonForm").attr("method","get").attr("action",listpath).submit();
 		});
+		
 		$('#searchBtn').click(function() {
 			$('#pg').val("1");
 			$('#key').val($('#skey').val());
@@ -109,7 +114,7 @@ $(document).ready(function() {
 	<!-- 공지기능 적용끝  -->
 	<c:if test="${articlelist.size() != 0}">
 	<c:forEach var="article" items="${articlelist}">
-	<tr class="posting" article-no="${article.seq}">
+	<tr id="back_c">
 		<td align="center" class="text_gray">${article.seq}</td>
 		<td></td>
 		<td nowrap class="onetext" style="padding-right: 5px"></td>
@@ -118,7 +123,7 @@ $(document).ready(function() {
      </td-->
 		<td style="word-break: break-all;">
 		<img src="${root}/img/board/blank.gif" height="1" width="${article.lev *10}">
-		<span> ${article.subject.replace("<","&lt;")}&nbsp;&nbsp;&nbsp;</span></td>
+		<span class="posting" article-no="${article.seq}" style="cursor:pointer"> ${article.subject.replace("<","&lt;")}&nbsp;&nbsp;&nbsp;</span></td>
 		<td></td>
 		<td style="word-break: break-all;">${article.name}</td>
 		<td></td>

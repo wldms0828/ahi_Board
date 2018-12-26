@@ -51,6 +51,7 @@ $(document).ready(function() {
 			<img src="${root}/img/board/poll_listbu1.gif" id="listBtn" width="62" height="21" border="0" 
 			align="absmiddle" alt="목록보기"
 			hspace="10">
+		</div>
 		</td>
 	</tr>
 </table>

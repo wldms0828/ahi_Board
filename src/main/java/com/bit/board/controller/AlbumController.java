@@ -78,6 +78,7 @@ public class AlbumController {
 				String savaFolder = df.format(new Date());
 				String fullSaveFolder = realPath+File.separator+savaFolder;
 				File dir = new File(fullSaveFolder);
+				// 파일을 저장하는 dir을 생성하는 코드
 				if(!dir.exists()) 
 					dir.mkdirs();
 					

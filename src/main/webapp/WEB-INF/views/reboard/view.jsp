@@ -5,7 +5,7 @@
 <c:if test="${article == null}">
 <script>
 	alert("해당글이 삭제되었거나 잘못된 URL 접근입니다.");
-	document.location.href = "${root}/index.jsp";
+	document.location.href = "${root}/index.jsp"; n
 </script>
 </c:if>
 <c:if test="${article != null}">
@@ -14,6 +14,7 @@ $(document).ready(function() {
 		control = "${root}/reboard/";
 		
 		initVars();
+		getMemoList();
 		$('.writeBtn').click(function() {
 			$("#commonForm").attr("method","get").attr("action",writepath).submit();
 		});
@@ -31,6 +32,121 @@ $(document).ready(function() {
 		$('.mvpage').click(function() {
 			$("#commonForm").attr("method","get").attr("action",listpath).submit();
 		});
+		
+		////대댓글
+		
+		$('#memoBtn').click(function() {
+			var seq = "${article.seq}";
+			var mcontent = $("#mcontent").val();
+			$("#mcontent").val("");
+			var parameter = JSON.stringify({'seq':seq,'mcontent':mcontent});
+			if(mcontent.trim().length != 0){
+				$.ajax({
+					url : '${root}/memo',
+					type : 'POST',
+					contentType: 'application/json;charset=UTF-8' ,
+					dataType:'json',
+					data : parameter,
+					success: function(data){
+						makeList(data);
+					}
+				});
+			}
+		});
+		
+		$(document).on("click",".viewMemoModifyBtn",function() {
+			//수정버튼은 바로 위에 있는 부모를 부르는것(parent)
+			var mseq =$(this).parent("td").attr("memo-mseq");
+			$('#div' + mseq).css("display","");
+		});		
+		
+		$(document).on("click",".memoCancleBtn",function() {
+			//취소버튼은 바로 위에 있는 부모를 부르는것이 아니고 올라가다가 td를 만날때 까지 가는 것(parents)
+			var mseq =$(this).parents("td").attr("memo-mseq");
+			$('#div' + mseq).css("display","none");			
+		});	
+		
+		$(document).on("click",".memoModifyBtn",function() {
+			var mseq =$(this).parents("td").attr("memo-mseq");
+			$('#div' + mseq).css("display","none");	
+			var seq = '${article.seq}';
+			var mcontent = $("#mcontent" + mseq).val();
+			var parameter = JSON.stringify({'mseq' : mseq , 'seq':seq, 'mcontent':mcontent});
+			if(mcontent.trim().length != 0){
+				$.ajax({
+					url : '${root}/memo',
+					type : 'PUT',
+					contentType: 'application/json;charset=UTF-8' ,
+					dataType:'json',
+					data : parameter,
+					success: function(data){
+						makeList(data);
+					}
+				});
+			}
+		});	
+		
+		$(document).on("click",".memoDeleteBtn",function() {
+			if(confirm("삭제하시겠습니까?")){
+				var mseq =$(this).parent("td").attr("memo-mseq");
+				$.ajax({
+					url : '${root}/memo/${article.seq}/'+mseq,
+					type : 'DELETE',
+					contentType: 'application/json;charset=UTF-8' ,
+					dataType:'json',
+					success: function(data){
+						makeList(data); 
+					}
+				});
+				getMemoList();
+			}
+		});	
+		function getMemoList() {
+			$.ajax({
+				 url : '${root}/memo/${article.seq}',
+                 type : 'GET',
+                 contentType: 'application/json;charset=UTF-8' ,
+                 dataType:'json',
+                 success: function(data){
+                       makeList(data);    
+				}
+			});
+		}
+
+		function makeList(memos) {
+			$('#memoview').empty();
+			var mlist=memos.memolist;
+			var output = "";
+			var len = mlist.length;
+			for(var i = 0;i<len;i++){
+				output += ' <tr>';
+				output += ' <td width="150" height="70">'+mlist[i].name+'</td>';
+				output += ' <td>'+mlist[i].mcontent+'</td>';
+				output += ' <td width="200" height="70">'+mlist[i].mtime+'</td>';
+				if(mlist[i].id == '${userInfo.id}'){
+					output += ' <td width="120" memo-mseq="'+mlist[i].mseq+'">';
+					output += ' <label class="viewMemoModifyBtn">수정</label>';
+					output += ' <label class="memoDeleteBtn">삭제</label>';
+					output += ' </td>';
+					output += ' </tr>';
+					output += ' <tr>';
+					output += ' 	<td colspan="4" memo-mseq="'+mlist[i].mseq+'">';
+					output += ' 		<div id="div' +mlist[i].mseq+ '" style = "display:none;">';
+					output += ' 		<textarea id="mcontent'+mlist[i].mseq+'" style="resize:none" rows="3" cols="150" >'+mlist[i].mcontent+'</textarea>';
+					output += ' <input type="button" value="수정" class="memoModifyBtn">';
+					output += ' <input type="button" value="취소" class="memoCancleBtn">';
+					output += ' </div>';
+					output += ' </td>';
+					
+				}
+				output += ' </tr>';
+				output += '	<tr>';
+				output += '	<td class="bg_board_title_02" height="1" colspan="11"';
+				output += ' style="overflow: hidden; padding: 0px"></td>';
+				output += '</tr>';
+			}
+			$('#memoview').append(output);
+		}
 		
 });
 </script>
@@ -54,11 +170,18 @@ $(document).ready(function() {
 		type="hidden" name="" value="">
 	<tr>
 		<td valign="bottom" nowrap>
-		
+					
 		<img src="${root}/img/board/btn_write_01.gif" class="writeBtn" width="64" height="22"
 			border="0" align="absmiddle" alt="글쓰기">
 			 <img src="${root}/img/board/btn_reply.gif" class="replyBtn" width="40" height="22"
 			border="0" align="absmiddle" alt="답글">
+		
+		<c:if test="${userInfo.id==article.id}">
+		<img src="${root}/img/board/btn_modify.gif" class="modifyBtn" 
+			border="0" align="absmiddle" alt="글수정">
+			 <img src="${root}/img/board/btn_delete.gif" class="deleteBtn" 
+			border="0" align="absmiddle" alt="글삭제">
+		</c:if>		
 		</td>
 		
 		<td valign="bottom" width="100%" style="padding-left: 4px"></td>
@@ -113,11 +236,7 @@ $(document).ready(function() {
 		<td bgcolor="#ffffff" width="100%" class="text"
 			style="padding-bottom: 8px; line-height: 1.3" id="clix_content">
 
-
-
 		<P>${article.content}</P>
-
-
 
 		</td>
 		<td nowrap valign="top" align="right" style="padding-left: 0px">
@@ -159,6 +278,15 @@ $(document).ready(function() {
 	</tr>
 </table>
 <br>
+<table cellpadding="5" cellspacing="5" border="0" width="100%">
+	<tr>
+		<td colspan="4">
+		<textarea id="mcontent" style="resize: none;" rows="3" cols="200" placeholder="댓글을 입력하세요."></textarea>
+		<input type="button" id="memoBtn" value="작성">
+		</td>
+	</tr>
+	<tbody id="memoview"></tbody>
+</table>
 </c:if>
 </body>
 </html>

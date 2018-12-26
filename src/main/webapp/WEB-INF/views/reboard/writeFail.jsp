@@ -19,11 +19,12 @@
 			align="center"><b>게시물 등록이 실패 되었습니다.</b><br>
 		<br>
 
-		<div align="center"><a href=""><img
+		<div align="center"><img
 			src="${root}/img/board/btn_write_01.gif" width="91" height="21"
-			border="0" align="absmiddle" alt="다시 작성" hspace="10"></a><a href=""><img
+			border="0" align="absmiddle" alt="다시 작성" hspace="10"><img
 			src="${root}/img/board/poll_listbu1.gif" width="62" height="21"
-			border="0" align="absmiddle" alt="목록보기" hspace="10"></a>
+			border="0" align="absmiddle" alt="목록보기" hspace="10">
+		</div>
 		</td>
 	</tr>
 </table>
